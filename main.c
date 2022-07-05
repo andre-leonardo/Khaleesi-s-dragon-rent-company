@@ -3,9 +3,9 @@
 int main(int argc, char *argv[]){
     
     int arrSize = 5;
-    char nomeGuerreiro[arrSize][20], reino[arrSize][20], titulo[arrSize][20], nomeDrake[arrSize][20], elementoDrake[arrSize][20];
+    char nomeGuerreiro[arrSize][20], reino[arrSize][20], titulo[arrSize][20], nomeDrake[arrSize][20], elementoDrake[arrSize][20], guerreiroProcurado[1][20];
     int drakeLock[arrSize], data[arrSize], checarCadastroGuerreiro[arrSize];
-    int opcao, i, codigoGuerreiro = 0, tentarNovamente = 0;
+    int opcao, i, codigoGuerreiro = 0, guerreiroExcluido = 0, tentarNovamente = 0;
 	
 	void funcaoCadastro()
 	{
@@ -46,30 +46,72 @@ int main(int argc, char *argv[]){
         {
         	while(tentarNovamente == 0)
             {
-            printf("Digite o codigo do guerreiro que não esteja sendo usado(um numero de 0 ate %d): ", arrSize-1);
-            scanf("%d", &codigoGuerreiro);
-            if (codigoGuerreiro >= 0 && codigoGuerreiro < arrSize)
-            {
-            	if (checarCadastroGuerreiro[codigoGuerreiro] == 1)
+	            printf("Digite o codigo do guerreiro que nao esteja sendo usado(um numero de 0 ate %d): ", arrSize-1);
+	            scanf("%d", &codigoGuerreiro);
+	            if (codigoGuerreiro >= 0 && codigoGuerreiro < arrSize)
             	{
-            		printf("Um guerreiro ja esta cadastrado com esse codigo, digite 0 para tentar novamente ou qualquer outro numero para voltar ao menu principal: ");
-            		scanf("%d", &tentarNovamente); 
-				}
-				else
-				{
-					funcaoCadastro();
-					checarCadastroGuerreiro[codigoGuerreiro] = 1;
-                	break;
-				}
-            }
-            else
-            {
-                printf("Codigo invalido, digite 0 para tentar novamente ou qualquer outro numero para voltar ao menu principal: ");
-                scanf("%d", &tentarNovamente); 
-            }
+	            	if (checarCadastroGuerreiro[codigoGuerreiro] == 1)
+	            	{
+	            		printf("Um guerreiro ja esta cadastrado com esse codigo, digite 0 para tentar novamente ou qualquer outro numero para voltar ao menu principal: ");
+	            		scanf("%d", &tentarNovamente); 
+					}
+					else
+					{
+						funcaoCadastro();
+						checarCadastroGuerreiro[codigoGuerreiro] = 1;
+	                	break;
+					}
+            	}
+	            else
+	            {
+	                printf("Codigo invalido, digite 0 para tentar novamente ou qualquer outro numero para voltar ao menu principal: ");
+	                scanf("%d", &tentarNovamente); 
+	            }
             }
             tentarNovamente = 0;
         }
+        
+        if (opcao == 3)
+        {
+        	while (tentarNovamente == 0)
+			{
+				printf("Digite o nome do guerreiro: ");
+				scanf("%s", &guerreiroProcurado[0]);
+				
+				for (i = 0; i < arrSize; i++)
+				{
+					if (strcmpi(guerreiroProcurado[0], nomeGuerreiro[i]) == 0)
+					{
+						printf("Guerreiro encontrado na posicao %d\n", i);
+						printf("Seu reino eh: %s\n", reino[i]);
+						printf("Seu titulo eh: %s\n", titulo[i]);
+					}
+					
+					else
+					{
+						printf("Guerreiro nao encontrado, digite 0 para pesquisar novamente ou qualquer outro numero para voltar ao menu principal: ");
+						scanf("%d", &tentarNovamente);
+						break;
+					}
+				}
+			}
+			tentarNovamente == 0;	
+		}
+		
+		if (opcao == 4)
+		{
+			while (tentarNovamente == 0)
+			{
+				printf("Digite o codigo do guerreiro: ");
+				scanf("%d", &guerreiroExcluido);
+				
+				if (guerreiroExcluido >= 0 && guerreiroExcluido < arrSize)
+				{
+					//////nomeGuerreiro[guerreiroExcluido] = 'i';
+					break;
+				}
+			}
+		}
         
     }
     while(opcao != 0);
