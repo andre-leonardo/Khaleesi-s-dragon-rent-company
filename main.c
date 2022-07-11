@@ -1,18 +1,37 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-#define arrSize 5
-#define tamanhoHistorico 5
+#define ARRSIZE 8
+#define ARRSIZEGUERREIRO 7
+#define ARRSIZEDRAKE 8
+#define TAMANHOHISTORICO 6
+
 
 //Variáveis para armazenar os dados do sistema. Elas devem ser globais, com macros (#define)
 char terra[5][20] = {"terra","fogo","agua","gelo","vento"};
-char nomeGuerreiro[arrSize][20], reino[arrSize][20], titulo[arrSize][20], elementoDrakeString[arrSize][20], nomeDrake[arrSize][20], guerreiroProcurado[1][20], drakeProcurado[1][20], drakeLocado[arrSize][20], alugadores[arrSize][20], historicoGuerreiro[tamanhoHistorico][20], historicoDrake[tamanhoHistorico][20];
-int idadeDrake[arrSize],elementoDrake[arrSize], data[arrSize][3], checarCadastroGuerreiro[arrSize], checarCadastroDrake[arrSize], checarSeDragaoJaEstaLocado[arrSize], checarSeGuerreiroJaTemDragao[arrSize];
-int opcao, i, e, d = tamanhoHistorico, codigoGuerreiro, codigoDrake, guerreiroExcluido, drakeExcluido, tentarNovamente = 0;
+char nomeGuerreiro[ARRSIZEGUERREIRO][20], reino[ARRSIZEGUERREIRO][20], titulo[ARRSIZEGUERREIRO][20], elementoDrakeString[ARRSIZEDRAKE][20], nomeDrake[ARRSIZEDRAKE][20], guerreiroProcurado[1][20], drakeProcurado[1][20], drakeLocado[ARRSIZE][20], alugadores[ARRSIZE][20], historicoGuerreiro[TAMANHOHISTORICO][20], historicoDrake[TAMANHOHISTORICO][20];
+int idadeDrake[ARRSIZEDRAKE],elementoDrake[ARRSIZEDRAKE], data[ARRSIZE][3], checarCadastroGuerreiro[ARRSIZEGUERREIRO], checarCadastroDrake[ARRSIZEDRAKE], checarSeDragaoJaEstaLocado[ARRSIZEDRAKE], checarSeGuerreiroJaTemDragao[ARRSIZEGUERREIRO];
+int contar = 0, contarDrake = 0, opcao, i, e, d = TAMANHOHISTORICO, codigoGuerreiro, codigoDrake, guerreiroExcluido, drakeExcluido, tentarNovamente = 0;
 
 //pre cadastrados para testes
-char guerreiro[2][20] = {"Jagunco", "Pierre"}, preReino[2][20] = {"Falconia", "Saint Paul"}, preTitulo[2][20] = {"O Pepino","Folgado"}, drake[2][20] = {"Super Fogareu", "Almofadinha"}, preElemento[2][20] = {"fogo", "agua"};
+char guerreiro[2][20] = {"Jagunco", "Pierre"}, preReino[2][20] = {"Falconia", "Saint Paul"}, preTitulo[2][20] = {"O Pepino","Folgado"}, drake[2][20] = {"Fogareu", "Almofadinha"}, preElemento[2][20] = {"fogo", "agua"};
 int preIdade[2] = {25, 890};
+
+void funcaoCadastroGuerreiro()
+	{
+		fflush(stdin);
+		printf("Digite o nome do guerreiro: ");
+        scanf("%[^\n]s", nomeGuerreiro[codigoGuerreiro]);
+        fflush(stdin);
+
+        printf("Digite o reino do guerreiro: ");
+        scanf("%[^\n]s", reino[codigoGuerreiro]);
+        fflush(stdin);
+
+        printf("Digite o titulo do guerreiro: ");
+        scanf("%[^\n]s", titulo[codigoGuerreiro]);
+        fflush(stdin);
+	}
 
 int main(int argc, char *argv[]){
 	//horario do sistema
@@ -22,14 +41,14 @@ int main(int argc, char *argv[]){
 	tempo = localtime(&segundos);  
 	printf("%d/%d/%d\n", tempo->tm_mday, tempo->tm_mon+1, tempo->tm_year+1900);
 
+	
 
-
-    for (i = 0; i < arrSize; i++)//FAZER COM QUE NO COMEÇO DO PROGRAMA AS POSICOES NA MATRIZ DOS NOMES SEJAM TODAS OCUPADAS POR \0
+    for (i = 0; i < ARRSIZEGUERREIRO; i++)//FAZER COM QUE NO COMEÇO DO PROGRAMA AS POSICOES NA MATRIZ DOS NOMES SEJAM TODAS OCUPADAS POR \0
     {
     	checarSeDragaoJaEstaLocado[i] = 0;
     	checarSeGuerreiroJaTemDragao[i] = 0;
     	idadeDrake[i] = 0;
-    	for (e = 0; e < 5; e++)
+    	for (e = 0; e < ARRSIZEGUERREIRO; e++)
     	{
     		nomeGuerreiro[i][e] = '\0';
     		nomeDrake[i][e] = '\0';
@@ -54,18 +73,11 @@ int main(int argc, char *argv[]){
 	idadeDrake[0] =  preIdade[1];
 	strcpy(elementoDrakeString[3], preElemento[0]);
 	strcpy(elementoDrakeString[0], preElemento[1]);
+	checarCadastroGuerreiro[1] = 1;
+	checarCadastroGuerreiro[4] = 1;
+	checarCadastroDrake[3] = 1;
+	checarCadastroDrake[0] = 1;
 	
-	void funcaoCadastroGuerreiro()
-	{
-		printf("Digite o nome do guerreiro: ");
-        scanf("%s", &nomeGuerreiro[codigoGuerreiro]);
-
-        printf("Digite o reino do guerreiro: ");
-        scanf("%s", &reino[codigoGuerreiro]);
-
-        printf("Digite o titulo do guerreiro: ");
-        scanf("%s", &titulo[codigoGuerreiro]);
-	}
 
     printf("-------------------\n");
     printf("LOCADORA DA KAHLEESI\n");
@@ -83,26 +95,35 @@ int main(int argc, char *argv[]){
 
         if (opcao == 1)//listar guerreiros
         {
-        	if (nomeGuerreiro[0][0] == '\0'  && nomeGuerreiro[1][0] == '\0' && nomeGuerreiro[2][0] == '\0' && nomeGuerreiro[3][0] == '\0' && nomeGuerreiro[4][0] == '\0' && nomeGuerreiro[5][0] == '\0' )
+			for (i = 0; i < ARRSIZEGUERREIRO; i++)
+			{
+				if (nomeGuerreiro[i][0] != '\0')
+				{
+					contar++;
+				}
+			}
+			
+        	if (contar == 0)
         	{
         		printf("Nenhum guerreiro cadastrado ate o momento\n\n");
 			}
 			else
             {
-                for(i = 0; i < arrSize; i++)
+                for(i = 0; i < ARRSIZEGUERREIRO; i++)
                 {
-                    printf("%s\n", nomeGuerreiro[i]);
+                    printf("%d - %s\n", i, nomeGuerreiro[i]);
                 }
 			}
+			contar = 0;
         }
 
         if (opcao == 2)//cadastro guerreiros
         {
         	while(tentarNovamente == 0)
             {
-	            printf("Digite o codigo do guerreiro que nao esteja sendo usado(um numero de 0 ate %d): ", arrSize-1);
+	            printf("Digite o codigo do guerreiro que nao esteja sendo usado(um numero de 0 ate %d): ", ARRSIZEGUERREIRO-1);
 	            scanf("%d", &codigoGuerreiro);
-	            if (codigoGuerreiro >= 0 && codigoGuerreiro < arrSize)
+	            if (codigoGuerreiro >= 0 && codigoGuerreiro < ARRSIZEGUERREIRO)
             	{
 	            	if (checarCadastroGuerreiro[codigoGuerreiro] == 1)
 	            	{
@@ -127,37 +148,15 @@ int main(int argc, char *argv[]){
 
         if (opcao == 3)//pesquisar guerreiro
         {
-        	while (tentarNovamente == 0)
+			for (i = 0; i < ARRSIZEGUERREIRO; i++)
 			{
-				printf("Digite o nome do guerreiro: ");
-				scanf("%s", &guerreiroProcurado[0]);
-
-				for (i = 0; i < arrSize; i++)
+				if (nomeGuerreiro[i][0] != '\0')
 				{
-					if (strcmpi(guerreiroProcurado[0], nomeGuerreiro[i]) == 0)
-					{
-						printf("Guerreiro encontrado na posicao %d\n", i);
-						printf("Seu reino eh: %s\n", reino[i]);
-						printf("Seu titulo eh: %s\n", titulo[i]);
-						tentarNovamente = 1;
-						i = 6;
-						break;
-					}
+					contar++;
 				}
-				if (i!=6)
-				{
-						
-					printf("Guerreiro nao encontrado, digite 0 para pesquisar novamente ou qualquer outro numero para voltar ao menu principal: ");
-					scanf("%d", &tentarNovamente);		
-				}
-				break;
 			}
-			tentarNovamente = 0;
-		}
-
-		if (opcao == 4)//Excluir guerreiro via codigo
-		{
-			if (nomeGuerreiro[0][0] == '\0'  && nomeGuerreiro[1][0] == '\0' && nomeGuerreiro[2][0] == '\0' && nomeGuerreiro[3][0] == '\0' && nomeGuerreiro[4][0] == '\0' && nomeGuerreiro[5][0] == '\0' )// ver se ja existem guerreiros cadastrados
+			
+        	if (contar == 0)
         	{
         		printf("Nenhum guerreiro cadastrado ate o momento\n\n");
 			}
@@ -165,14 +164,60 @@ int main(int argc, char *argv[]){
 			{
 				while (tentarNovamente == 0)
 				{
-					for(i = 0; i < arrSize; i++)//Imprimir os guerreiros e seus codigos
+					fflush(stdin);
+					printf("Digite o nome do guerreiro: ");
+					scanf("%[^\n]s", guerreiroProcurado[0]);
+
+					for (i = 0; i < ARRSIZEGUERREIRO; i++)
+					{
+						if (strcmpi(guerreiroProcurado[0], nomeGuerreiro[i]) == 0)
+						{
+							printf("Guerreiro encontrado na posicao %d\n", i);
+							printf("Seu reino eh: %s\n", reino[i]);
+							printf("Seu titulo eh: %s\n", titulo[i]);
+							tentarNovamente = 1;
+							i = ARRSIZEGUERREIRO + 1;
+							break;
+						}
+					}
+					if (i!=ARRSIZEGUERREIRO+1)
+					{
+							
+						printf("Guerreiro nao encontrado, digite 0 para pesquisar novamente ou qualquer outro numero para voltar ao menu principal: ");
+						scanf("%d", &tentarNovamente);		
+					}
+				}
+			}
+			contar = 0;
+			tentarNovamente = 0;
+		}
+
+		if (opcao == 4)//Excluir guerreiro via codigo
+		{
+			for (i = 0; i < ARRSIZEGUERREIRO; i++)
+			{
+				if (nomeGuerreiro[i][0] != '\0')
+				{
+					contar++;
+				}
+			}
+			
+        	if (contar == 0)
+				{
+					printf("Nenhum guerreiro cadastrado ate o momento\n\n");
+				}
+			else
+			{
+				while (tentarNovamente == 0)
+				{
+					for(i = 0; i < ARRSIZEGUERREIRO; i++)//Imprimir os guerreiros e seus codigos
 					{
 						printf("%d - %s\n", i, nomeGuerreiro[i]);
 					}
 					printf("Digite o codigo do guerreiro que quer excluir: ");
 					scanf("%d", &guerreiroExcluido);
 					
-					if (guerreiroExcluido >= 0 && guerreiroExcluido < arrSize)
+					if (guerreiroExcluido >= 0 && guerreiroExcluido < ARRSIZEGUERREIRO)
 					{
 						if (checarSeGuerreiroJaTemDragao[guerreiroExcluido] == 1)
 						{
@@ -198,30 +243,40 @@ int main(int argc, char *argv[]){
 				}
 			}
 			tentarNovamente = 0;
+			contar = 0;
 		}
 
 		if (opcao == 5)//listar dragoes
 		{
-		     if (nomeDrake[0][0] == '\0'  && nomeDrake[1][0] == '\0' && nomeDrake[2][0] == '\0' && nomeDrake[3][0] == '\0' && nomeDrake[4][0] == '\0' && nomeDrake[5][0] == '\0' )
-        	{
-        		printf("Nenhum dragao cadastrado ate o momento\n\n");
-			}
+		     for (i = 0; i < ARRSIZEDRAKE; i++)
+				{
+					if (nomeDrake[i][0] != '\0')
+					{
+						contar++;
+					}
+				}
+			
+        	if (contar == 0)
+				{
+					printf("Nenhum dragao cadastrado ate o momento\n\n");
+				}
             else
             {
-                for(i = 0; i < arrSize; i++)
+                for(i = 0; i < ARRSIZEDRAKE; i++)
                 {
-                    printf("%s\n", nomeDrake[i]);
+                    printf("%d - %s\n", i, nomeDrake[i]);
                 }
             }
+			contar = 0;
 		}
 
 		if (opcao == 6)//cadastrar dragao
         {
             while(tentarNovamente == 0)
             {
-	            printf("Digite o codigo do dragao que nao esteja sendo usado(um numero de 0 ate %d): ", arrSize-1);
+	            printf("Digite o codigo do dragao que nao esteja sendo usado(um numero de 0 ate %d): ", ARRSIZEDRAKE-1);
 	            scanf("%d", &codigoDrake);
-	            if (codigoDrake >= 0 && codigoDrake < arrSize)
+	            if (codigoDrake >= 0 && codigoDrake < ARRSIZEDRAKE)
             	{
 	            	if (checarCadastroDrake[codigoDrake] == 1)
 	            	{
@@ -230,12 +285,13 @@ int main(int argc, char *argv[]){
 					}
 					else
 					{
+						fflush(stdin);
 						printf("Digite o nome do dragao: ");
-                        scanf("%s", &nomeDrake[codigoDrake]);
-
+                        scanf("%[^\n]s", nomeDrake[codigoDrake]);
+						fflush(stdin);
                         printf("Digite a idade do dragao: ");
                         scanf("%d", &idadeDrake[codigoDrake]);
-
+						
                         while (tentarNovamente == 0)
                         {
                             printf("Digite o numero do elemento do dragao\n1 - terra\n2 - fogo\n3 - agua\n4 -  gelo\n5 - vento: ");
@@ -286,10 +342,11 @@ int main(int argc, char *argv[]){
         {
             while (tentarNovamente == 0)
 			{
+				fflush(stdin);
 				printf("Digite o nome do dragao: ");
-				scanf("%s", &drakeProcurado[0]);
+				scanf("%[^\n]s", drakeProcurado[0]);
 
-				for (i = 0; i < arrSize; i++)
+				for (i = 0; i < ARRSIZEDRAKE; i++)
 				{
 					if (strcmpi(drakeProcurado[0], nomeDrake[i]) == 0)
 					{
@@ -297,32 +354,39 @@ int main(int argc, char *argv[]){
 						printf("Sua idade eh: %d anos\n", idadeDrake[i]);
 						printf("Seu elemento eh: %s\n", elementoDrakeString[i]);
 						tentarNovamente = 1;
-						i = 6;
+						i = ARRSIZEDRAKE+1;
 						break;
 					}
 				}
-				if (i!=6)
+				if (i!=ARRSIZEDRAKE+1)
 				{
 						
 					printf("Dragao nao encontrado, digite 0 para pesquisar novamente ou qualquer outro numero para voltar ao menu principal: ");
 					scanf("%d", &tentarNovamente);		
 				}
-				break;
        		}
        		tentarNovamente = 0;
        }
 
         if (opcao == 8)//excluir dragao por codigo
         {
-        	if (nomeDrake[0][0] == '\0'  && nomeDrake[1][0] == '\0' && nomeDrake[2][0] == '\0' && nomeDrake[3][0] == '\0' && nomeDrake[4][0] == '\0' && nomeDrake[5][0] == '\0' )
-        	{
-        		printf("Nenhum dragao cadastrado ate o momento\n\n");
-			}
+        	for (i = 0; i < ARRSIZEDRAKE; i++)
+				{
+					if (nomeDrake[i][0] != '\0')
+					{
+						contar++;
+					}
+				}
+			
+        	if (contar == 0)
+				{
+					printf("Nenhum dragao cadastrado ate o momento\n\n");
+				}
 			else
 			{
 				while (tentarNovamente == 0)
 				{
-					for(i = 0; i < arrSize; i++)
+					for(i = 0; i < ARRSIZEDRAKE; i++)
 					{
 						printf("%d - %s\n", i, nomeDrake[i]);
 					}
@@ -335,7 +399,7 @@ int main(int argc, char *argv[]){
 						break;
 					}
 	
-					if (drakeExcluido >= 0 && drakeExcluido < arrSize)
+					if (drakeExcluido >= 0 && drakeExcluido < ARRSIZEDRAKE)
 					{
 					    if (nomeDrake[drakeExcluido][0] == '\0')
 	                    {
@@ -357,19 +421,28 @@ int main(int argc, char *argv[]){
 					}
 				}
 			}
+			contar = 0;
         }
 
         if (opcao == 9)//listar dragoes locados
         {
-            if (drakeLocado[0][0] == '\0'  && drakeLocado[1][0] == '\0' && drakeLocado[2][0] == '\0' && drakeLocado[3][0] == '\0' && drakeLocado[4][0] == '\0' && drakeLocado[5][0] == '\0' )
-        	{
-        		printf("Nenhum dragao locado ate o momento\n\n");
-			}
+            for (i = 0; i < ARRSIZEDRAKE; i++)
+				{
+					if (drakeLocado[i][0] != '\0')
+					{
+						contar++;
+					}
+				}
+			
+        	if (contar == 0)
+				{
+					printf("Nenhum dragao locado ate o momento\n\n");
+				}
 			else
             {
-                for(i = 0; i < arrSize; i++)
+                for(i = 0; i < ARRSIZE; i++)
                 {
-                    printf("Dragao: %s, guerreiro que alugou: %s, data de devolucao: ", drakeLocado[i], alugadores[i]);
+                    printf("Dragao: %s, guerreiro que alugou: %s, data para devolucao: ", drakeLocado[i], alugadores[i]);
                     for (e = 0; e < 3; e++)
                     {
                     	printf("%d/", data[i][e]);
@@ -377,115 +450,181 @@ int main(int argc, char *argv[]){
 					printf("\n");
                 }
 			}
+			contar = 0;
         }
 
         if (opcao == 10)//locar dragao
-        {
-            while (tentarNovamente == 0)
-            {
-                printf("Digite o codigo do guerreiro: ");
-                scanf("%d", &codigoGuerreiro);
-                if (nomeGuerreiro[codigoGuerreiro][0] == '\0')
-                {
-                	printf("Nenhum guerreiro esta com esse codigo, digite 0 para tentar novamente ou qualquer outro numero para voltar para o menu principal: ");
-                    scanf("%d", &tentarNovamente);
-				}
-                else if (!(codigoGuerreiro >=0 && codigoGuerreiro < arrSize))
-                {
-                    printf("Codigo invalido, digite 0 para tentar novamente ou qualquer outro numero para voltar para o menu principal: ");
-                    scanf("%d", &tentarNovamente);
-                }
-                else if (checarSeGuerreiroJaTemDragao[codigoGuerreiro] == 1)
-                {
-                    printf("Esse guerreiro ja tem um dragao locado, digite 0 para digitar outro codigo ou qualquer outro numero para voltar para o menu principal: ");
-                    scanf("%d", &tentarNovamente);
-                }
-                else
-                {
-                    printf("Digite o codigo do dragao: ");
-                    scanf("%d", &codigoDrake);
-                    if (nomeDrake[codigoDrake][0] == '\0')
-	                {
-	                	printf("Nenhum dragao esta com esse codigo, digite 0 para tentar novamente ou qualquer outro numero para voltar para o menu principal: ");
-	                    scanf("%d", &tentarNovamente);
+        {	
+			for (i = 0; i < ARRSIZEGUERREIRO; i++)
+				{
+					if (nomeGuerreiro[i][0] != '\0')
+					{
+						contar++;
 					}
-                    else if (!(codigoDrake >=0 && codigoDrake < arrSize))
-                    {
-                        printf("Codigo invalido, digite 0 para tentar novamente ou qualquer outro numero para voltar para o menu principal: ");
-                        scanf("%d", &tentarNovamente);
-                    }
-                    else if (checarSeDragaoJaEstaLocado[codigoDrake] == 1)
-                    {
-                        printf("Esse dragao ja esta locado, digite 0 para digitar outro codigo ou qualquer outro numero para voltar para o menu principal: ");
-                        scanf("%d", &tentarNovamente);
-                    }
-                    else 
-                    {
-                        strcpy(drakeLocado[codigoGuerreiro], nomeDrake[codigoDrake]);
-                        strcpy(alugadores[codigoGuerreiro], nomeGuerreiro[codigoGuerreiro]);
-                        checarSeDragaoJaEstaLocado[codigoDrake] = 1;
-                        checarSeGuerreiroJaTemDragao[codigoGuerreiro] = 1;
-                        data[codigoGuerreiro][0] = tempo->tm_mday;
-                        data[codigoGuerreiro][1] = tempo->tm_mon+1;
-                        data[codigoGuerreiro][2] = tempo->tm_year+1901;
-                        
-                        d--;
-                        strcpy(historicoGuerreiro[d], alugadores[codigoGuerreiro]);
-                        strcpy(historicoDrake[d], drakeLocado[codigoGuerreiro]);
-                        
-                        printf("Dragao locado com sucesso\n\n");
-                        break;
-                    }
-                }
-            }
+				}
+			for (i = 0; i < ARRSIZEDRAKE; i++)
+				{
+					if (nomeDrake[i][0] != '\0')
+					{
+						contarDrake++;
+					}
+				}
+			
+        	if (contar == 0 || contarDrake == 0)
+				{
+					printf("Nenhum guerreiro e(ou) dragao cadastrado\n");
+				}
+			
+			
+			else
+			{
+				while (tentarNovamente == 0)
+				{
+					printf("Digite o codigo do guerreiro: ");
+					scanf("%d", &codigoGuerreiro);
+					if (nomeGuerreiro[codigoGuerreiro][0] == '\0')
+					{
+						printf("Nenhum guerreiro esta com esse codigo, digite 0 para tentar novamente ou qualquer outro numero para voltar para o menu principal: ");
+						scanf("%d", &tentarNovamente);
+					}
+					else if (!(codigoGuerreiro >=0 && codigoGuerreiro < ARRSIZEGUERREIRO))
+					{
+						printf("Codigo invalido, digite 0 para tentar novamente ou qualquer outro numero para voltar para o menu principal: ");
+						scanf("%d", &tentarNovamente);
+					}
+					else if (checarSeGuerreiroJaTemDragao[codigoGuerreiro] == 1)
+					{
+						printf("Esse guerreiro ja tem um dragao locado, digite 0 para digitar outro codigo ou qualquer outro numero para voltar para o menu principal: ");
+						scanf("%d", &tentarNovamente);
+					}
+					else
+					{
+						printf("Digite o codigo do dragao: ");
+						scanf("%d", &codigoDrake);
+						if (nomeDrake[codigoDrake][0] == '\0')
+						{
+							printf("Nenhum dragao esta com esse codigo, digite 0 para tentar novamente ou qualquer outro numero para voltar para o menu principal: ");
+							scanf("%d", &tentarNovamente);
+						}
+						else if (!(codigoDrake >=0 && codigoDrake < ARRSIZEDRAKE))
+						{
+							printf("Codigo invalido, digite 0 para tentar novamente ou qualquer outro numero para voltar para o menu principal: ");
+							scanf("%d", &tentarNovamente);
+						}
+						else if (checarSeDragaoJaEstaLocado[codigoDrake] == 1)
+						{
+							printf("Esse dragao ja esta locado, digite 0 para digitar outro codigo ou qualquer outro numero para voltar para o menu principal: ");
+							scanf("%d", &tentarNovamente);
+						}
+						else 
+						{
+							strcpy(drakeLocado[codigoGuerreiro], nomeDrake[codigoDrake]);
+							strcpy(alugadores[codigoGuerreiro], nomeGuerreiro[codigoGuerreiro]);
+							checarSeDragaoJaEstaLocado[codigoDrake] = 1;
+							checarSeGuerreiroJaTemDragao[codigoGuerreiro] = 1;
+							data[codigoGuerreiro][0] = tempo->tm_mday;
+							data[codigoGuerreiro][1] = tempo->tm_mon+1;
+							data[codigoGuerreiro][2] = tempo->tm_year+1901;
+							
+							d--;
+							strcpy(historicoGuerreiro[d], alugadores[codigoGuerreiro]);
+							strcpy(historicoDrake[d], drakeLocado[codigoGuerreiro]);
+							
+							printf("Dragao locado com sucesso\n\n");
+							break;
+						}
+					}
+            	}
+			}
             tentarNovamente = 0;
+			contar = 0;
         }
         
         if (opcao == 11)//devolver dragao locado
         {
-        	while (tentarNovamente == 0)
-        	{
+			for (i = 0; i < ARRSIZEGUERREIRO; i++)
+				{
+					if (nomeGuerreiro[i][0] != '\0')
+					{
+						contar++;
+					}
+				}
+			for (i = 0; i < ARRSIZEDRAKE; i++)
+				{
+					if (nomeDrake[i][0] != '\0')
+					{
+						contarDrake++;
+					}
+				}
 			
-	        	printf("Digite o codigo do guerreiro: ");
-	        	scanf("%d", &codigoGuerreiro);
-	        	if (nomeGuerreiro[codigoGuerreiro][0] == '\0')
-	                {
-	                	printf("Nenhum guerreiro esta com esse codigo, digite 0 para tentar novamente ou qualquer outro numero para voltar para o menu principal: ");
-	                    scanf("%d", &tentarNovamente);
+        	if (contar == 0 || contarDrake == 0)
+				{
+					printf("Nenhum guerreiro e(ou) dragao cadastrado\n");
+				}
+			
+			else
+			{
+				while (tentarNovamente == 0)
+				{
+				
+					printf("Digite o codigo do guerreiro: ");
+					scanf("%d", &codigoGuerreiro);
+					if (nomeGuerreiro[codigoGuerreiro][0] == '\0')
+						{
+							printf("Nenhum guerreiro esta com esse codigo, digite 0 para tentar novamente ou qualquer outro numero para voltar para o menu principal: ");
+							scanf("%d", &tentarNovamente);
+						}
+					else if (!(codigoGuerreiro >=0 && codigoGuerreiro < ARRSIZEGUERREIRO))
+						{
+							printf("Codigo invalido, digite 0 para tentar novamente ou qualquer outro numero para voltar para o menu principal: ");
+							scanf("%d", &tentarNovamente);
+						}
+					else if (checarSeGuerreiroJaTemDragao[codigoGuerreiro] == 0)
+					{
+						printf("Esse guerreiro nao tem nenhum dragao locado, digite 0 para digitar outro codigo ou qualquer outro numero para voltar para o menu principal: ");
+						scanf("%d", &tentarNovamente);
 					}
-				else if (!(codigoGuerreiro >=0 && codigoGuerreiro < arrSize))
-	                {
-	                    printf("Codigo invalido, digite 0 para tentar novamente ou qualquer outro numero para voltar para o menu principal: ");
-	                    scanf("%d", &tentarNovamente);
-	                }
-	            else if (checarSeGuerreiroJaTemDragao[codigoGuerreiro] == 0)
-                {
-                    printf("Esse guerreiro nao tem nenhum dragao locado, digite 0 para digitar outro codigo ou qualquer outro numero para voltar para o menu principal: ");
-                    scanf("%d", &tentarNovamente);
-                }
-                    else
-                    {
-                        drakeLocado[codigoGuerreiro][0] = '\0';
-                        alugadores[codigoGuerreiro][0] = '\0';
-                        checarSeDragaoJaEstaLocado[codigoDrake] = 0;
-                        checarSeGuerreiroJaTemDragao[codigoGuerreiro] = 0;
-                        data[codigoGuerreiro][0] = '\0';
-                        data[codigoGuerreiro][1] = '\0';
-                        data[codigoGuerreiro][2] = '\0';
-                        printf("Dragao devolvido com sucesso\n\n");
-                        break;
-					}
-	        }	
+						else
+						{
+							drakeLocado[codigoGuerreiro][0] = '\0';
+							alugadores[codigoGuerreiro][0] = '\0';
+							checarSeDragaoJaEstaLocado[codigoDrake] = 0;
+							checarSeGuerreiroJaTemDragao[codigoGuerreiro] = 0;
+							data[codigoGuerreiro][0] = '\0';
+							data[codigoGuerreiro][1] = '\0';
+							data[codigoGuerreiro][2] = '\0';
+							printf("Dragao devolvido com sucesso\n\n");
+							break;
+						}
+				}
+			}	
 	        tentarNovamente = 0;
 	    }
 	    
 	    if (opcao == 12)
 	    {
-	    	for (i = tamanhoHistorico-1; i >= 0; i--)
-	    	{
-	    		printf("%s foi locado por %s\n ", historicoDrake[i], historicoGuerreiro[i]);
+	    	for (i = 0; i < TAMANHOHISTORICO; i++)
+				{
+					if (historicoGuerreiro[i][0] != '\0')
+					{
+						contar++;
+					}
+				}
+			if (contar == 0)
+				{
+					printf("Nenhuma transacao feita\n");
+				}
+			else
+			{
+		    	for (i = TAMANHOHISTORICO-1; i >= 0; i--)
+		    	{
+		    		printf("%s foi locado por %s\n ", historicoDrake[i], historicoGuerreiro[i]);
+				}
 			}
 		}
+		tentarNovamente = 0;
+		contarDrake = 0;
+		contar = 0;
     }
     while(opcao != 0);
     return 0;
