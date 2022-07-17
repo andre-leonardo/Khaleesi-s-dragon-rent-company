@@ -2,12 +2,13 @@
 #include <string.h>
 #include <time.h>
 #define ARRSIZE 8
-#define ARRSIZEGUERREIRO 7
+#define ARRSIZEGUERREIRO 10
 #define ARRSIZEDRAKE 8
 #define TAMANHOHISTORICO 6
 
 
 //Variáveis para armazenar os dados do sistema. Elas devem ser globais, com macros (#define)
+
 char terra[5][20] = {"terra","fogo","agua","gelo","vento"};
 char nomeGuerreiro[ARRSIZEGUERREIRO][20], reino[ARRSIZEGUERREIRO][20], titulo[ARRSIZEGUERREIRO][20], elementoDrakeString[ARRSIZEDRAKE][20], nomeDrake[ARRSIZEDRAKE][20], guerreiroProcurado[1][20], drakeProcurado[1][20], drakeLocado[ARRSIZE][20], alugadores[ARRSIZE][20], historicoGuerreiro[TAMANHOHISTORICO][20], historicoDrake[TAMANHOHISTORICO][20];
 int idadeDrake[ARRSIZEDRAKE],elementoDrake[ARRSIZEDRAKE], data[ARRSIZE][3], checarCadastroGuerreiro[ARRSIZEGUERREIRO], checarCadastroDrake[ARRSIZEDRAKE], checarSeDragaoJaEstaLocado[ARRSIZEDRAKE], checarSeGuerreiroJaTemDragao[ARRSIZEGUERREIRO];
@@ -482,14 +483,14 @@ int main(int argc, char *argv[]){
 				{
 					printf("Digite o codigo do guerreiro: ");
 					scanf("%d", &codigoGuerreiro);
-					if (nomeGuerreiro[codigoGuerreiro][0] == '\0')
-					{
-						printf("Nenhum guerreiro esta com esse codigo, digite 0 para tentar novamente ou qualquer outro numero para voltar para o menu principal: ");
-						scanf("%d", &tentarNovamente);
-					}
-					else if (!(codigoGuerreiro >=0 && codigoGuerreiro < ARRSIZEGUERREIRO))
+					if (!(codigoGuerreiro >=0 && codigoGuerreiro < ARRSIZEGUERREIRO))
 					{
 						printf("Codigo invalido, digite 0 para tentar novamente ou qualquer outro numero para voltar para o menu principal: ");
+						scanf("%d", &tentarNovamente);
+					}
+					else if (nomeGuerreiro[codigoGuerreiro][0] == '\0')
+					{
+						printf("Nenhum guerreiro esta com esse codigo, digite 0 para tentar novamente ou qualquer outro numero para voltar para o menu principal: ");
 						scanf("%d", &tentarNovamente);
 					}
 					else if (checarSeGuerreiroJaTemDragao[codigoGuerreiro] == 1)
@@ -569,16 +570,18 @@ int main(int argc, char *argv[]){
 				
 					printf("Digite o codigo do guerreiro: ");
 					scanf("%d", &codigoGuerreiro);
-					if (nomeGuerreiro[codigoGuerreiro][0] == '\0')
-						{
-							printf("Nenhum guerreiro esta com esse codigo, digite 0 para tentar novamente ou qualquer outro numero para voltar para o menu principal: ");
-							scanf("%d", &tentarNovamente);
-						}
-					else if (!(codigoGuerreiro >=0 && codigoGuerreiro < ARRSIZEGUERREIRO))
+					if (!(codigoGuerreiro >=0 && codigoGuerreiro < ARRSIZEGUERREIRO))
 						{
 							printf("Codigo invalido, digite 0 para tentar novamente ou qualquer outro numero para voltar para o menu principal: ");
 							scanf("%d", &tentarNovamente);
 						}
+						
+					else if (nomeGuerreiro[codigoGuerreiro][0] == '\0')
+						{
+							printf("Nenhum guerreiro esta com esse codigo, digite 0 para tentar novamente ou qualquer outro numero para voltar para o menu principal: ");
+							scanf("%d", &tentarNovamente);
+						}
+		
 					else if (checarSeGuerreiroJaTemDragao[codigoGuerreiro] == 0)
 					{
 						printf("Esse guerreiro nao tem nenhum dragao locado, digite 0 para digitar outro codigo ou qualquer outro numero para voltar para o menu principal: ");
